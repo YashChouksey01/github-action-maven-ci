@@ -17,6 +17,13 @@ jobs:
             #   with:
             #      distribution: 'temurin'
             #      java-version: '17'
+            - name: Cache local Maven repository   # Dependency caching means saving downloaded dependencies from one workflow run and reusing them in later runs, instead of downloading everything again.
+              uses: actions/cache@v6
+              with:
+                path: ~/.m2/repository
+                key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+                restore-keys: |
+                   ${{ runner.os }}-maven-
             - name: running tests
               run: mvn test
     build2:
@@ -85,3 +92,9 @@ jobs:
 
 # now we can access the job output in another job using: ${{ needs.build.outputs.artifact-data }} but other jobs must contain needs: build
  
+
+
+
+# Every new runner starts fresh, so Maven may download dependencies again. 
+# Dependency caching means saving downloaded dependencies from one workflow run and reusing them in later runs, instead of downloading everything again.
+# https://github.com/actions/cache
