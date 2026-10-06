@@ -1,0 +1,35 @@
+name: maven github action2
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+    test2:
+        name: Run test2 for maven2
+        runs-on: ubuntu-latest
+        steps:
+            - name: get source code 
+              uses: actions/checkout@v6
+            # - name: setup java
+            #   uses: actions/setup-java@v5
+            #   with:
+            #      distribution: 'temurin'
+            #      java-version: '17'
+            - name: running tests
+              run: mvn test
+    build2:
+        needs: test2
+        name: building maven2
+        runs-on: ubuntu-latest
+        steps: 
+            - name: get source code 
+              uses: actions/checkout@v6
+            # - name: setup java
+            #   uses: actions/setup-java@v5
+            #   with:
+            #      distribution: 'temurin'
+            #      java-version: '17'
+            - name: building jar artifacts file after cleaning ealier build 
+              run: mvn clean package
