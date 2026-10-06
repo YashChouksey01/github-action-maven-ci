@@ -71,7 +71,8 @@ jobs:
 
 
 
-            
+#---------------------run: find target/*.jar -type f -execdir echo 'artifact-data={}' >> $GITHUB_OUTPUT ';'  
+
 #  1) find target/*.jar -type f -execdir
    # find target/*.jar -> Find files matching target/*.jar. , -type f--> consider regular files ,  -execdir-> Execute a command in the directory where the found file exists.
 #  2) echo 'artifact-data={}' 
@@ -95,6 +96,7 @@ jobs:
 
 
 
+#--------------------dependency caching 
 # Every new runner starts fresh, so Maven may download dependencies again. 
 # Dependency caching means saving downloaded dependencies from one workflow run and reusing them in later runs, instead of downloading everything again.
 # https://github.com/actions/cache
