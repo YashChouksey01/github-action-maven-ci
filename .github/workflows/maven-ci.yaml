@@ -47,9 +47,8 @@
 #           name: artifact-data
 #           path: 'target/*.jar'
 #       - name: Get the name of the output file
-#         id: artifact-name
+#         id: artifact-name                       
 #         run: find target/*.jar -type f -execdir echo 'artifact-data={}' >> $GITHUB_OUTPUT ';'
-        
 #   deploy:
 #     needs: build
 #     name: taking artifacts of maven

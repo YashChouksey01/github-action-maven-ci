@@ -23,6 +23,8 @@ jobs:
         needs: test2
         name: building maven2
         runs-on: ubuntu-latest
+        outputs:         #job Output -> If you want to make a value available to another job, you create a job output.
+            artifact-data: ${{ steps.artifact-name.outputs.artifact-data }} # takes value from step output
         steps: 
             - name: get source code 
               uses: actions/checkout@v6
@@ -39,7 +41,12 @@ jobs:
                 name: artifact-data2    # artifact's name in GitHub
                 path: |                 # to give multiple file as a path we can use pipe symbol and give the path of the files to be uploaded
                    target/*.jar          
-                 # uploading all the jar files from target folder which is auto created by maven on the the runner machine to artifact-data2 , Maven uses target as its standard build output directory.
+                 # uploading all the jar files from target folder which is auto created by maven on the the runner machine to artifact-data2 
+                 # Maven uses target as its standard build output directory.
+
+            - name: Get the name of the output file
+              id: artifact-name                       # This gives the step an identifier.  You can later refer to this step using: steps.artifact-name
+              run: find target/*.jar -type f -execdir echo 'artifact-data={}' >> $GITHUB_OUTPUT ';' #step output-> output name = artifact-data ,output value = myapp-1.0.jar
     deploy2:
         needs: build2
         name: taking artifacts of maven2
@@ -51,3 +58,30 @@ jobs:
                 name: artifact-data2   # name of the artifact to be downloaded from build2 job
           - name: List the downloaded artifacts
             run: ls  # list all the files and directories  in the current working directory of the runner machine
+          - name: getting the artifact name from build2 job output
+            run: echo ${{ needs.build2.outputs.artifact-data }} # for this the  jobs must contain needs: build
+
+
+
+
+            
+#  1) find target/*.jar -type f -execdir
+   # find target/*.jar -> Find files matching target/*.jar. , -type f--> consider regular files ,  -execdir-> Execute a command in the directory where the found file exists.
+#  2) echo 'artifact-data={}' 
+   # The {} is replaced by the file that find discovered. ,  command means -> artifact-data=./myapp-1.0.jar
+#  3) >> $GITHUB_OUTPUT -> This appends the output of the echo command to the $GITHUB_OUTPUT file, 
+
+    # $GITHUB_OUTPUT is a special file provided by GitHub Actions to the running step. #You use it when you want to tell GitHub: Save this value as an output of this step."
+    # GitHub Actions reads: artifact-data=myapp.jar from $GITHUB_OUTPUT and creates a step output
+
+  
+# echo 'artifact-data=some-file.jar' >> $GITHUB_OUTPUT  -> output name = artifact-data  , output value = myapp-1.0.jar
+# so we have  StepID: artifact-name  & step Output:  artifact-data = myapp-1.0.jar ---can access it -->  ${{ steps.artifact-name.outputs.artifact-data }}
+
+
+# job Output -> If you want to make that value available to another job, you create a job output.
+#                 outputs:
+#                    artifact-data: ${{ steps.artifact-name.outputs.artifact-data  }}   --> takes value from step output
+
+# now we can access the job output in another job using: ${{ needs.build.outputs.artifact-data }} but other jobs must contain needs: build
+ 
