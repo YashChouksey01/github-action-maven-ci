@@ -72,7 +72,7 @@ jobs:
 
 
 #---------------------run: find target/*.jar -type f -execdir echo 'artifact-data={}' >> $GITHUB_OUTPUT ';'  
-
+# STEP OUTPUT
 #  1) find target/*.jar -type f -execdir
    # find target/*.jar -> Find files matching target/*.jar. , -type f--> consider regular files ,  -execdir-> Execute a command in the directory where the found file exists.
 #  2) echo 'artifact-data={}' 
@@ -87,7 +87,7 @@ jobs:
 # so we have  StepID: artifact-name  & step Output:  artifact-data = myapp-1.0.jar ---can access it -->  ${{ steps.artifact-name.outputs.artifact-data }}
 
 
-# job Output -> If you want to make that value available to another job, you create a job output.
+# JOB OUTPUT -> If you want to make that value available to another job, you create a job output.
 #                 outputs:
 #                    artifact-data: ${{ steps.artifact-name.outputs.artifact-data  }}   --> takes value from step output
 
