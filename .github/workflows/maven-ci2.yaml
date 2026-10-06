@@ -33,3 +33,12 @@ jobs:
             #      java-version: '17'
             - name: building jar artifacts file after cleaning ealier build 
               run: mvn clean package
+            - name: upload artifacts
+              uses: actions/upload-artifact@v6
+              with:
+                name: artifact-data2          # artifact's name in GitHub
+                path: |                       # to give multiple file as a path we can use pipe symbol and give the path of the files to be uploaded
+                  - "target/*.jar"            # uploading all the jar files from target folder on the the runner machine to artifact-data2
+
+
+             
