@@ -53,7 +53,7 @@ jobs:
 
             - name: Get the name of the output file
               id: artifact-name                       # This gives the step an identifier.  You can later refer to this step using: steps.artifact-name
-              run: find target/*.jar -type f -execdir echo 'artifact-data={}' >> $GITHUB_OUTPUT ';' #step output-> output name = artifact-data ,output value = myapp-1.0.jar
+              run: find target/*.jar -type f -execdir echo 'artifact-data={}' >> $GITHUB_OUTPUT ';' #step output created-> output name = artifact-data ,output value = myapp-1.0.jar
     deploy2:
         needs: build2
         name: taking artifacts of maven2
